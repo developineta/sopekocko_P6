@@ -2,13 +2,13 @@ const Sauce = require('../models/Sauce');
 const fs = require('fs'); // Système de fichiers
 
 exports.createSauce = (req, res, next) => {
-    const sauceObject = JSON.parse(req.body.oneSauce);
+    const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;
-    const oneSauce = new Sauce({
+    const sauce = new Sauce({
         ...sauceObject,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
-    oneSauce.save()
+    sauce.save()
         .then(() => res.status(201).json({ message: 'Sauce enregistré !'}))
         .catch(error => res.status(400).json({ error }));
 };
@@ -48,3 +48,8 @@ exports.getAllSauces = (req, res, next) => {
         .then(allSauces => res.status(200).json(allSauces)) //!!
         .catch(error => res.status(400).json({ error }));
 };
+
+/* Likes et dislikes
+exports.likesDislikes = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+    .then(sauce => {});*/

@@ -7,7 +7,7 @@ const saucesRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
 // Connexion à cluster de la base de données Mongoose
-mongoose.connect('mongodb+srv://developineta:111sparnis@cluster0.bdaw5.mongodb.net/Cluster0?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://XXX:XXX@cluster0.bdaw5.mongodb.net/Cluster0?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -27,7 +27,7 @@ app.use(bodyParser.json()); // Accès au corps de la requête
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-app.use('api/sauces', saucesRoutes);
+app.use('/api/sauces', saucesRoutes);
 app.use('/api/auth', userRoutes);
 
 module.exports = app;
