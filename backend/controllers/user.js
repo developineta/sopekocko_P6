@@ -1,38 +1,38 @@
-const User = require('../models/User');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const User = require('../models/User'); // Importer modèle de 'User'
+const bcrypt = require('bcrypt');       // Importer le système qui crypte le mot de passe
+const jwt = require('jsonwebtoken');    // Importer le paquet de création de 'Token'
 
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-        const user = new User({
+    bcrypt.hash(req.body.password, 10)  // La fonction pour 'hasher' le mot de passe
+    .then(hash => {                     // Récuperation de 'hash' de mot de passe
+        const user = new User({         // Création de nouveau utilisateur
             email: req.body.email,
-            password: hash
+            password: hash              // Enregistrement de mot de passe 'haché'
         });
-        user.save()
-            .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
+        user.save()                     // Sauvegarde de nouveau utilisateur dans la base de données
+            .then(() => res.status(201).json({ message: 'Utilisateur est crée !' }))
             .catch(error => res.status(400).json({ error }));
     })
     .catch(error => res.status(500).json({ error }));
 };
 
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })
+    User.findOne({ email: req.body.email }) // Pour trouver l'utilisateur correspondant à l'adresse mail saisie
         .then(user => {
                 if (!user) {
                 return res.status(401).json({ error: 'Utilisateur non trouvé !' });
             }
-            bcrypt.compare(req.body.password, user.password)
+            bcrypt.compare(req.body.password, user.password) // Pour comparer le mot de passe saisie avec le 'hash' savegardé dans la base de données
                 .then(valid => {
                     if (!valid) {
                         return res.status(401).json({ error: 'Mot de passe incorrect !' });
                     }
-                    res.status(200).json({
-                        userId: user._id,
-                        token: jwt.sign(
-                            { userId: user._id },
-                            'RANDOM_TOKEN_SECRET', //!!
-                            { expiresIn: '24h' }
+                    res.status(200).json({ // Si l'utilisateur est trouvé
+                        userId: user._id, // Envoi l'Id d'utilisateur correspondant
+                        token: jwt.sign(  // La fonction de signature de 'Token'
+                            { userId: user._id }, // Pour créer l'objet de l'Id de l'utilisateur correspondant
+                            'RANDOM_TOKEN_SECRET', // ?!?
+                            { expiresIn: '24h' } // Expiration du 'Token en 24h
                         )
                     });
                 })

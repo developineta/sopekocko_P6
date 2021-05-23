@@ -1,6 +1,7 @@
-const http = require('http');
-const app = require('./app');
+const http = require('http'); // Importer 'http' module pour créer serveur HTTP
+const app = require('./app'); // Importer 'app'
 
+// Renforcement de la requête pour éviter les erreurs
 const normalizePort = val => {
   const port = parseInt(val, 10);
 
@@ -12,7 +13,7 @@ const normalizePort = val => {
   }
   return false;
 };
-const port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || '3000'); // Ports à utiliser
 app.set('port', port);
 
 const errorHandler = error => {
@@ -44,4 +45,4 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
-server.listen(port);
+server.listen(port); // Le serveur attend les requêtes au port indiqué
