@@ -10,33 +10,33 @@ exports.signup = (req, res, next) => {
             password: hash              // Enregistrement de mot de passe 'haché'
         });
         user.save()                     // Sauvegarde de nouveau utilisateur dans la base de données
-            .then(() => res.status(201).json({ message: 'Utilisateur est crée !' }))
-            .catch(error => res.status(400).json({ error }));
+        .then(() => res.status(201).json({ message: 'Utilisateur est crée !' }))
+        .catch(error => res.status(400).json({ error }));
     })
     .catch(error => res.status(500).json({ error }));
 };
 
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email }) // Pour trouver l'utilisateur correspondant à l'adresse mail saisie
-        .then(user => {
-                if (!user) {
-                return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+    .then(user => {
+        if (!user) {
+            return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+        }
+        bcrypt.compare(req.body.password, user.password) // Pour comparer le mot de passe saisie avec le 'hash' savegardé dans la base de données
+        .then(valid => {
+            if (!valid) {
+                return res.status(401).json({ error: 'Mot de passe incorrect !' });
             }
-            bcrypt.compare(req.body.password, user.password) // Pour comparer le mot de passe saisie avec le 'hash' savegardé dans la base de données
-                .then(valid => {
-                    if (!valid) {
-                        return res.status(401).json({ error: 'Mot de passe incorrect !' });
-                    }
-                    res.status(200).json({ // Si l'utilisateur est trouvé
-                        userId: user._id, // Envoi l'Id d'utilisateur correspondant
-                        token: jwt.sign(  // La fonction de signature de 'Token'
-                            { userId: user._id }, // Pour créer l'objet de l'Id de l'utilisateur correspondant
-                            'RANDOM_TOKEN_SECRET', // ?!?
-                            { expiresIn: '24h' } // Expiration du 'Token en 24h
-                        )
-                    });
-                })
-                .catch(error => res.status(500).json({ error }));
+            res.status(200).json({ // Si l'utilisateur est trouvé
+                userId: user._id, // Envoi l'Id d'utilisateur correspondant
+                token: jwt.sign(  // La fonction de signature de 'Token'
+                { userId: user._id }, // Pour créer l'objet de l'Id de l'utilisateur correspondant
+                process.env.RANDOM_TOKEN_SECRET, // Utilisation de clé de 'token' secret, crée avec 'crypto'
+                { expiresIn: '24h' } // Expiration du 'Token' en 24h
+                )
+            });
         })
         .catch(error => res.status(500).json({ error }));
+    })
+    .catch(error => res.status(500).json({ error }));
 };
