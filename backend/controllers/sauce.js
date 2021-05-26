@@ -1,7 +1,7 @@
 const Sauce = require('../models/Sauce'); // Pour importer le modèle de sauce
 const fs = require('fs'); // Système de fichiers (paquet node js)
 
-exports.createSauce = (req, res, next) => {
+exports.createSauce = (req, res, next) => { // Pour la requête POST
     const sauceObject = JSON.parse(req.body.sauce); // On transforme le 'body' de sauce en objet JS
     delete sauceObject._id; // On supprime l'id retourné, qu'on n'aura pas besoin
     const sauce = new Sauce({
@@ -16,7 +16,7 @@ exports.createSauce = (req, res, next) => {
 exports.modifySauce = (req, res, next) => {
     const sauceObject = req.file ?  // Si un nouveau fichier est trouvé
       {
-        ...JSON.parse(req.body.oneSauce), // Récuperation de la chaine de caractères et transformation en objet JS
+        ...JSON.parse(req.body.sauce), // Récuperation de la chaine de caractères et transformation en objet JS
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };                 // Si le fichier n'est pas trouvé, on prend en compte le 'body' uniquement
     Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id }) // Mettre à jour la sauce
@@ -100,34 +100,3 @@ exports.likesDislikes = (req, res, next) => {
     })
     .catch(error => res.status(500).json({ error }))
 };
-
-/*exports.likesDislikes = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.id })
-    .then(sauce => {
-        const getLike = req.body.like;
-        const getUser = req.body.userId;
-        let usersLiked = sauce.usersLiked;
-        let usersDisliked = sauce.usersDisliked;
-        let likes = sauce.likes;
-        let dislikes = sauce.likes; 
-
-        if(getLike === 1){
-            usersLiked.push(getUser); // Si like, ajoute Id d'utilisateur à la liste de likes
-        }
-        if(getLike === 0 && usersLiked.includes(getUser)){
-            usersLiked.pull(getUser); // Si unlike et Id utilisateur est dans le liste, enlève like
-        }
-        if(getLike === 0 && usersDisliked.includes(getUser)){
-            usersDisliked.pull(getUser); // Si unlève dislike et Id utilisateur est dans le liste, enlève dislike
-        }
-        if(getLike === -1){
-            usersDisliked.push(getUser); // Si dislike, ajoute Id d'utilisateur à la liste de dislikes
-        }
-
-        likes = usersLiked.length;
-        dislikes = usersDisliked.length;
-        Sauce.updateOne({ _id: req.params.id }); // Met à jour la sauce
-    })
-    .then(() => res.status(200).json({ message : 'Sauce a eu like ou dislike'}))
-    .catch(error => res.status(400).json({error}));
-}; */

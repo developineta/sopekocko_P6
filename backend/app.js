@@ -1,3 +1,4 @@
+require('dotenv').config(); // Importation de module Dotenv qui charge fichier '.env' contenant le secret 'token'
 const express = require('express'); // Importer le paquet Express
 const bodyParser = require('body-parser'); // Importer le paquet Body-parser (transforme le corps de la requête en objet JS; pour gérer la demande POST
 const mongoose = require('mongoose'); // Importer le paquet Mongoose (la base de données)
@@ -7,7 +8,7 @@ const saucesRoutes = require('./routes/sauce'); // L'importation du router de sa
 const userRoutes = require('./routes/user');    // L'importation du router de user
 
 // Connexion à cluster de la base de données Mongoose
-mongoose.connect('mongodb+srv://developineta:3yWD9sLNg1hngrWZ@cluster0.bdaw5.mongodb.net/Cluster0?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://tableAdmin:zGsdoDkBXx0vxfRN@cluster0.bdaw5.mongodb.net/Cluster0?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
