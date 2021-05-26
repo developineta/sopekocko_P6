@@ -1,6 +1,6 @@
-const mongoose = require('mongoose'); // Importer le paquet de Mongoose
+const mongoose = require('mongoose');           // Importer le paquet de Mongoose
 
-const sauceSchema = mongoose.Schema({ // Schema qui définie la structure de données d'une sauce
+const sauceSchema = mongoose.Schema({           // Schema qui définie la structure de données d'une sauce
     userId: { type: String, required: true },
     name: { type: String, required: true },
     manufacturer: { type: String, required: true },
