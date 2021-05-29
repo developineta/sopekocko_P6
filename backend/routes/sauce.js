@@ -3,7 +3,7 @@ const router = express.Router();            // La création du router
 
 const saucesCtrl = require('../controllers/sauce');     // Création de 'controller sauce' utilisant le fichier indiqué
 const auth = require('../middleware/auth');             // Définition de middleware d'authentification, utilisant le fichier indiqué
-const multer = require('../middleware/multer-config');  // Définition de 'multer', utilisant le fichier indiqué
+const multer = require('../middleware/multer-config');  // Définition de 'multer' pour la gestion des fichiers, utilisant le fichier indiqué
 
 // Les routes de sauces disponibles dans l'application
 router.post('/', auth, multer, saucesCtrl.createSauce);

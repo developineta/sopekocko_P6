@@ -27,12 +27,12 @@ exports.login = (req, res, next) => {
             if (!valid) {
                 return res.status(401).json({ error: 'Mot de passe incorrect !' });
             }
-            res.status(200).json({                  // Si l'utilisateur est trouvé
-                userId: user._id,                   // Envoi l'Id d'utilisateur correspondant
-                token: jwt.sign(                    // La fonction de signature de 'token'
-                { userId: user._id },               // Pour créer l'objet de l'Id de l'utilisateur correspondant
-                process.env.RANDOM_TOKEN_SECRET,    // Utilisation de clé de 'token' secret, crée avec 'crypto'
-                { expiresIn: '24h' }                // Expiration du 'token' en 24h
+            res.status(200).json({                      // Si l'utilisateur est trouvé
+                userId: user._id,                       // Envoi l'Id d'utilisateur correspondant
+                token: jwt.sign(                        // La fonction de signature de 'token'
+                    { userId: user._id },               // Pour créer l'objet de l'Id de l'utilisateur correspondant
+                    process.env.RANDOM_TOKEN_SECRET,    // Utilisation de clé de 'token' secret, crée avec 'crypto' dans le fichier .env
+                    { expiresIn: '24h' }                // Expiration du 'token' en 24h
                 )
             });
         })

@@ -26,9 +26,9 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());                 // Accès au corps de la requête
 
-app.use('/images', express.static(path.join(__dirname, 'images'))); // Middleware pour servir le dossier 'images' lors d'une requête concernée
+app.use('/images', express.static(path.join(__dirname, 'images'))); // Gestionnaire de routage pour servir le dossier 'images' lors d'une requête concernée
 
-app.use('/api/sauces', saucesRoutes);       // La route API pour laquelle on utilise router indiqué
+app.use('/api/sauces', saucesRoutes);       // La route API pour laquelle on utilise routeur indiqué
 app.use('/api/auth', userRoutes);
 
 module.exports = app;                       // L'exportation de l'application
