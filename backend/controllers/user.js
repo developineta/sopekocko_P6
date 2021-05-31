@@ -1,12 +1,13 @@
 const User = require('../models/User'); // Importer modèle de 'User'
 const bcrypt = require('bcrypt');       // Importer le système qui crypte le mot de passe
 const jwt = require('jsonwebtoken');    // Importer le paquet de création de 'Token'
+const MaskData = require('maskdata');   // Importer le paquet pour le masquage d'email
 
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)  // La fonction pour 'hasher' le mot de passe
     .then(hash => {                     // Récuperation de 'hash' de mot de passe
         const user = new User({         // Création de nouveau utilisateur
-            email: req.body.email,
+            email: MaskData.maskEmail2(req.body.email), // Masquage d'email
             password: hash              // Enregistrement de mot de passe 'haché'
         });
         user.save()                     // Sauvegarde de nouveau utilisateur dans la base de données
@@ -17,7 +18,7 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })             // Pour trouver l'utilisateur correspondant à l'adresse mail saisie
+    User.findOne({ email: MaskData.maskEmail2(req.body.email) }) // Pour trouver l'utilisateur correspondant à l'adresse email masqué saisie
     .then(user => {
         if (!user) {
             return res.status(401).json({ error: 'Utilisateur non trouvé !' });
